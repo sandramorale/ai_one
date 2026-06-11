@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sandra Morales - Portfolio</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f4f7f6;
+        }
+        header {
+            text-align: center;
+            padding: 2rem 0;
+            background: #2c3e50;
+            color: #fff;
+            border-radius: 8px;
+        }
+        main {
+            padding: 2rem;
+            background: #fff;
+            margin-top: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        .link-container {
+            margin-top: 20px;
+            text-align: center;
+        }
+        a {
+            display: inline-block;
+            padding: 10px 20px;
+            background-color: #3498db;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+            transition: background 0.3s;
+        }
+        a:hover {
+            background-color: #2980b9;
+        }
+        footer {
+            text-align: center;
+            margin-top: 20px;
+            font-size: 0.8rem;
+            color: #777;
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <h1 id="name">Sandra Morales</h1>
+        <p>Professor at <span id="institution">Dallas College</span></p>
+    </header>
+
+    <main>
+        <h2>Welcome</h2>
+        <p>Welcome to my professional academic page. Use the link below to view my resources on Child Development.</p>
+        
+        <div class="link-container">
+            <a href="Child_Development.html">View Child Development Resources</a>
+        </div>
+    </main>
+
+    <footer>
+        <p>&copy; 2026 Sandra Morales</p>
+    </footer>
+
+    <script>
+        // Simple script to log a welcome message to the console
+        document.addEventListener('DOMContentLoaded', () => {
+            console.log("Welcome to Sandra Morales' academic website.");
+            const nameElement = document.getElementById('name');
+            nameElement.style.color = '#ecf0f1';
+        });
+    </script>
+</body>
+</html>
