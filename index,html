@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Place Value Explorer</title>
+    <style>
+        :root {
+            --base-font-size: 16px;
+            --bg: #ffffff;
+            --text: #333333;
+            --primary: #2563eb;
+            --accent: #f59e0b;
+        }
+
+        body {
+            font-size: var(--base-font-size);
+            font-family: sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            line-height: 1.5;
+            margin: 0;
+            padding: 20px;
+            transition: background 0.3s, color 0.3s;
+        }
+
+        .high-contrast {
+            background: #1A1A1A !important;
+            color: #F5F5F5 !important;
+        }
+
+        .high-contrast button {
+            border: 2px solid #F5F5F5;
+            color: #F5F5F5;
+            background: transparent;
+        }
+
+        .motion-reduced, .motion-reduced * {
+            transition: none !important;
+            animation: none !important;
+        }
+
+        header, nav, main, section { display: block; padding: 10px; }
+        .controls { display: flex; gap: 10px; align-items: center; margin-bottom: 20px; flex-wrap: wrap; }
+        
+        #progress-bar { width: 100%; height: 20px; background: #eee; border-radius: 10px; overflow: hidden; margin: 10px 0; }
+        #progress-fill { height: 100%; background: var(--primary); width: 0%; transition: width 0.3s; }
+
+        .tab-content { display: none; }
+        .tab-content.active { display: block; }
+        button { padding: 8px 16px; cursor: pointer; border-radius: 4px; border: 1px solid #ccc; font-weight: bold; }
+        .btn-primary { background: var(--primary); color: white; border: none; }
+
+        textarea, input { width: 100%; padding: 10px; margin-top: 10px; box-sizing: border-box; }
+        
+        .feedback { margin-top: 15px; font-weight: bold; padding: 10px; border-radius: 5px; }
+        .feedback.correct { background: #dcfce7; color: #166534; }
+        .feedback.wrong { background: #fee2e2; color: #991b1b; }
+
+        @media (forced-colors: active) {
+            button { border: 2px solid ButtonText; }
+        }
+    </style>
+</head>
+<body>
+
+<a href="#main" style="position:absolute; left:-9999px;">Skip to main content</a>
+
+<header>
+    <div class="controls">
+        <button onclick="changeFontSize(-2)" aria-label="Decrease font size">A-</button>
+        <span id="font-val">16px</span>
+        <button onclick="changeFontSize(2)" aria-label="Increase font size">A+</button>
+        <button id="hc-toggle" aria-pressed="false" onclick="toggleHC()">High Contrast: OFF</button>
+        <button id="rm-toggle" aria-pressed="false" onclick="toggleRM()">Reduce Motion: OFF</button>
+    </div>
+    <h1>Place Value Probing</h1>
+    <div id="progress-bar" role="progressbar" aria-valuenow="0" aria-valuemax="100">
+        <div id="progress-fill"></div>
+    </div>
+</header>
+
+<main id="main">
+    <nav>
+        <button class="tab-link active" onclick="showTab('lesson')">Lesson</button>
+        <button class="tab-link" onclick="showTab('quiz')">Challenge</button>
+        <button class="tab-link" onclick="showTab('exit')">Exit Ticket</button>
+    </nav>
+
+    <section id="lesson" class="tab-content active">
+        <h2>Concept 1: Understanding Digits</h2>
+        <p>A digit's value depends on where it lives in a number. In the number 25, the '2' represents two tens, not just two ones.</p>
+        <h2>Concept 2: Expanded Form</h2>
+        <p>Breaking numbers apart helps us see their value. 342 is 300 + 40 + 2.</p>
+        <h2>Concept 3: Comparing Numbers</h2>
+        <p>When comparing, always check the highest place value first. A 400 is always larger than any combination of tens and ones.</p>
+    </section>
+
+    <section id="quiz" class="tab-content">
+        <h2>Place Value Challenge</h2>
+        <div id="question-area" aria-live="polite">
+            <!-- Quiz questions injected here -->
+        </div>
+    </section>
+
+    <section id="exit" class="tab-content">
+        <h2>Exit Ticket</h2>
+        <label for="reflection">How did you figure out the value of the digits today?</label>
+        <textarea id="reflection" placeholder="Type 1–2 sentences in your own words."></textarea>
+        <button class="btn-primary" onclick="finishActivity()">Submit Reflection</button>
+    </section>
+</main>
+
+<script>
+    let fontSize = 16;
+    let quizScore = 0;
+    let currentQuestionIndex = 0;
+
+    const questions = [
+        { q: "What is the value of 5 in 52?", a: ["50", "5"], correct: "50" },
+        { q: "Which equals 300 + 40 + 2?", a: ["342", "243", "304"], correct: "342" },
+        { q: "In 789, what does the 7 stand for?", a: ["700", "70", "7"], correct: "700" },
+        { q: "Which number is greater: 45 or 54?", a: ["54", "45"], correct: "54" }
+    ];
+
+    // Shuffle questions
+    questions.sort(() => Math.random() - 0.5);
+
+    function changeFontSize(delta) {
+        fontSize = Math.min(24, Math.max(12, fontSize + delta));
+        document.documentElement.style.setProperty('--base-font-size', fontSize + 'px');
+        document.getElementById('font-val').innerText = fontSize + 'px';
+    }
+
+    function toggleHC() {
+        const b = document.body;
+        const btn = document.getElementById('hc-toggle');
+        b.classList.toggle('high-contrast');
+        const isPressed = b.classList.contains('high-contrast');
+        btn.setAttribute('aria-pressed', isPressed);
+        btn.innerText = `High Contrast: ${isPressed ? 'ON' : 'OFF'}`;
+    }
+
+    function toggleRM() {
+        const b = document.body;
+        const btn = document.getElementById('rm-toggle');
+        b.classList.toggle('motion-reduced');
+        const isPressed = b.classList.contains('motion-reduced');
+        btn.setAttribute('aria-pressed', isPressed);
+        btn.innerText = `Reduce Motion: ${isPressed ? 'ON' : 'OFF'}`;
+    }
+
+    function showTab(id) {
+        document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
+        document.getElementById(id).classList.add('active');
+        updateProgress(id);
+    }
+
+    function updateProgress(tab) {
+        const map = { 'lesson': 33, 'quiz': 66, 'exit': 100 };
+        const val = map[tab] || 0;
+        document.getElementById('progress-fill').style.width = val + '%';
+        document.getElementById('progress-bar').setAttribute('aria-valuenow', val);
+    }
+
+    function renderQuestion() {
+        if (currentQuestionIndex >= questions.length) {
+            document.getElementById('question-area').innerHTML = `<h3>Quiz Finished!</h3><p>Your score: ${quizScore} / ${questions.length}</p><button onclick="resetQuiz()">Try Again</button>`;
+            return;
+        }
+
+        const q = questions[currentQuestionIndex];
+        let html = `<p>${q.q}</p>`;
+        q.a.forEach(choice => {
+            html += `<button onclick="checkAnswer('${choice}', '${q.correct}')">${choice}</button> `;
+        });
+        document.getElementById('question-area').innerHTML = html;
+    }
+
+    function checkAnswer(choice, correct) {
+        const area = document.getElementById('question-area');
+        if (choice === correct) {
+            quizScore++;
+            area.innerHTML = `<p class="feedback correct">Correct!</p>`;
+        } else {
+            area.innerHTML = `<p class="feedback wrong">That's not quite right. Keep practicing!</p>`;
+        }
+        
+        setTimeout(() => {
+            currentQuestionIndex++;
+            renderQuestion();
+        }, 1500);
+    }
+
+    function resetQuiz() {
+        quizScore = 0;
+        currentQuestionIndex = 0;
+        questions.sort(() => Math.random() - 0.5);
+        renderQuestion();
+    }
+
+    function finishActivity() {
+        alert("Thanks for your reflection! Your hard work today is appreciated.");
+    }
+
+    window.onload = () => {
+        renderQuestion();
+    }
+</script>
+</body>
+</html>
