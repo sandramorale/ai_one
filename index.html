@@ -31,6 +31,10 @@
         .link-container {
             margin-top: 20px;
             text-align: center;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            align-items: center;
         }
         a {
             display: inline-block;
@@ -40,6 +44,7 @@
             text-decoration: none;
             border-radius: 5px;
             transition: background 0.3s;
+            width: 250px; /* Uniform width for links */
         }
         a:hover {
             background-color: #2980b9;
@@ -61,10 +66,11 @@
 
     <main>
         <h2>Welcome</h2>
-        <p>Welcome to my professional academic page. Use the link below to view my resources on Child Development.</p>
+        <p>Welcome to my professional academic page. Use the links below to view my resources.</p>
         
         <div class="link-container">
             <a href="child_development.html">View Child Development Resources</a>
+            <a href="probingquestions.html">View Probing Questions</a>
         </div>
     </main>
 
@@ -73,7 +79,6 @@
     </footer>
 
     <script>
-        // Simple script to log a welcome message to the console
         document.addEventListener('DOMContentLoaded', () => {
             console.log("Welcome to Sandra Morales' academic website.");
             const nameElement = document.getElementById('name');
