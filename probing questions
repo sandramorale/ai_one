@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lesson Prompt Generator</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        .dark { background-color: #1a202c; color: #e2e8f0; }
+        .light { background-color: #f7fafc; color: #2d3748; }
+    </style>
+</head>
+<body class="light transition-colors duration-300 min-h-screen p-4 md:p-8">
+    <div class="max-w-4xl mx-auto">
+        <header class="flex justify-between items-center mb-8">
+            <h1 class="text-3xl font-bold">Lesson Prompt Generator</h1>
+            <div class="flex gap-2">
+                <button onclick="toggleTheme()" class="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600">Toggle Theme</button>
+                <button onclick="window.print()" class="px-4 py-2 bg-green-500 text-white rounded hover:bg-green-600">Print/Download</button>
+            </div>
+        </header>
+
+        <div class="grid md:grid-cols-2 gap-6">
+            <!-- Form Section -->
+            <div class="space-y-4">
+                <div>
+                    <label class="block font-semibold">Lesson Title</label>
+                    <input type="text" id="title" class="w-full p-2 border rounded dark:bg-gray-800" placeholder="e.g. Photosynthesis">
+                </div>
+                <div>
+                    <label class="block font-semibold">Subject</label>
+                    <select id="subject" class="w-full p-2 border rounded dark:bg-gray-800">
+                        <option>Science</option>
+                        <option>Mathematics</option>
+                        <option>History</option>
+                        <option>Literature</option>
+                    </select>
+                </div>
+                <div class="space-y-2">
+                    <label class="block font-semibold">Include Sections</label>
+                    <div class="grid grid-cols-2 gap-2 text-sm">
+                        <label><input type="checkbox" id="obj" checked> Objectives</label>
+                        <label><input type="checkbox" id="terms" checked> Key Terms</label>
+                        <label><input type="checkbox" id="pretest" checked> Pre-test</label>
+                        <label><input type="checkbox" id="analogy" checked> Analogies</label>
+                        <label><input type="checkbox" id="quiz" checked> Review Quiz</label>
+                        <label><input type="checkbox" id="ada" checked> ADA Checklist</label>
+                    </div>
+                </div>
+                <div>
+                    <label class="block font-semibold">AI Platform</label>
+                    <select id="platform" class="w-full p-2 border rounded dark:bg-gray-800">
+                        <option>ChatGPT</option>
+                        <option>Claude</option>
+                        <option>Gemini</option>
+                    </select>
+                </div>
+                <button onclick="generatePrompt()" class="w-full py-3 bg-purple-600 text-white font-bold rounded hover:bg-purple-700">Generate Prompt</button>
+            </div>
+
+            <!-- Output Section -->
+            <div class="border rounded p-4 dark:bg-gray-800 bg-white shadow-inner">
+                <h2 class="font-bold mb-2">Generated Prompt:</h2>
+                <textarea id="output" readonly class="w-full h-80 p-2 text-sm border rounded bg-gray-50 dark:bg-gray-900"></textarea>
+                <button onclick="copyToClipboard()" class="mt-2 w-full py-2 border rounded hover:bg-gray-200 dark:hover:bg-gray-700">Copy Prompt</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function toggleTheme() {
+            document.body.classList.toggle('light');
+            document.body.classList.toggle('dark');
+        }
+
+        function generatePrompt() {
+            const title = document.getElementById('title').value || "the specified topic";
+            const subject = document.getElementById('subject').value;
+            const platform = document.getElementById('platform').value;
+            
+            let sections = [];
+            if(document.getElementById('obj').checked) sections.push("- Learning Objectives");
+            if(document.getElementById('terms').checked) sections.push("- Key Terms and Concepts");
+            if(document.getElementById('pretest').checked) sections.push("- A short Pre-test");
+            if(document.getElementById('analogy').checked) sections.push("- Real-world analogies and examples");
+            if(document.getElementById('quiz').checked) sections.push("- A review quiz with answer key");
+            if(document.getElementById('ada').checked) sections.push("- An accessibility (ADA) checklist for this lesson");
+
+            const prompt = `Act as an expert educator for ${subject}. Create a detailed lesson plan for "${title}". 
+            Please include the following sections: 
+            ${sections.join('\n')}
+            
+            Ensure the content is engaging and structured for ${platform}.`;
+
+            document.getElementById('output').value = prompt;
+        }
+
+        function copyToClipboard() {
+            const copyText = document.getElementById("output");
+            copyText.select();
+            document.execCommand('copy');
+            alert("Prompt copied to clipboard!");
+        }
+    </script>
+</body>
+</html>
