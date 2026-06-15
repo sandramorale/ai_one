@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Child Development Theory Lab</title>
+    <style>
+        body { font-family: sans-serif; line-height: 1.6; max-width: 800px; margin: 20px auto; padding: 20px; background: #f4f7f6; }
+        .card { background: white; padding: 20px; border-radius: 8px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); margin-bottom: 20px; }
+        button { background: #007bff; color: white; border: none; padding: 10px 15px; border-radius: 4px; cursor: pointer; }
+        #feedback { font-weight: bold; margin-top: 10px; }
+    </style>
+</head>
+<body>
+
+    <h1>Child Development Theory Lab</h1>
+    <p>As a future educator, you must recognize the theoretical basis of student behavior. Match the theory to the classroom scenario below.</p>
+
+    <div class="card">
+        <h3 id="scenario">Scenario: A student struggles with a math problem, so you provide a "scaffold" or hint to help them solve it just beyond their current independent ability.</h3>
+        <select id="theorySelect">
+            <option value="">--Select a Theory--</option>
+            <option value="Piaget">Piaget's Cognitive Development</option>
+            <option value="Vygotsky">Vygotsky's Zone of Proximal Development</option>
+            <option value="Erikson">Erikson's Psychosocial Stages</option>
+        </select>
+        <button onclick="checkAnswer()">Submit</button>
+        <div id="feedback"></div>
+    </div>
+
+    <script>
+        function checkAnswer() {
+            const select = document.getElementById('theorySelect').value;
+            const feedback = document.getElementById('feedback');
+            if (select === "Vygotsky") {
+                feedback.innerText = "Correct! Vygotsky emphasized that social interaction and support (scaffolding) are essential for learning within the Zone of Proximal Development.";
+                feedback.style.color = "green";
+            } else if (select === "") {
+                feedback.innerText = "Please select an option.";
+            } else {
+                feedback.innerText = "Not quite. Think about the 'help' provided. This focuses on the gap between what a child can do alone vs. with guidance.";
+                feedback.style.color = "red";
+            }
+        }
+    </script>
+</body>
+</html>
